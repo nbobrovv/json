@@ -3,6 +3,7 @@
 
 import json
 import sys
+import jsonschema
 
 
 def show_commands():
@@ -90,7 +91,17 @@ def load_students(file_name):
     Загрузить всех работников из файла JSON
     """
     with open(file_name, "r", encoding="utf-8") as fin:
-        return json.load(fin)
+        file = json.load(fin)
+        with open("schema.json") as check:
+            schema = json.load(check)
+            validator = jsonschema.Draft7Validator(schema)
+            try:
+                if not validator.validate(file):
+                    print("Successfully!")
+            except jsonschema.exceptions.ValidationError:
+                print("Ошибка валидации", list(validator.iter_errors(file)))
+                exit()
+            return file
 
 
 def main():
