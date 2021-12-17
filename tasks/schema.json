@@ -1,0 +1,25 @@
+{
+    "type": "array",
+    "items": [
+        {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "group": {
+                    "type": "string"
+                },
+                "grade": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "group",
+                "grade"
+            ],
+            "additionalProperties": false
+        }
+    ]
+}
