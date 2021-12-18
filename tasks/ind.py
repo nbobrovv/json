@@ -90,18 +90,44 @@ def load_students(file_name):
     """
     Загрузить всех работников из файла JSON
     """
-    with open(file_name, "r", encoding="utf-8") as fin:
-        files = json.load(fin)
-        with open("schema.json") as check:
-            schema = json.load(check)
-            validator = jsonschema.Draft7Validator(schema)
-            try:
-                if not validator.validate(files):
-                    print("Successfully!")
-            except jsonschema.exceptions.ValidationError:
-                print("Ошибка валидации", list(validator.iter_errors(files)))
-                exit()
-            return files
+
+    schema = {
+        "type": "array",
+        "items": [
+            {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "group": {
+                        "type": "string"
+                    },
+                    "grade": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "group",
+                    "grade"
+                ]
+            }
+        ]
+    }
+
+    fin = open(file_name, "r", encoding="utf-8")
+    files = json.load(fin)
+    fin.close()
+    validator = jsonschema.Draft7Validator(schema)
+    try:
+        if not validator.validate(files):
+            print("Successfully!")
+    except jsonschema.exceptions.ValidationError:
+        print("VALIDATION ERROR", list(validator.iter_errors(files)))
+        exit()
+
+    return files
 
 
 def main():
