@@ -116,18 +116,17 @@ def load_students(file_name):
         ]
     }
 
-    fin = open(file_name, "r", encoding="utf-8")
-    files = json.load(fin)
-    fin.close()
+    with open(file_name, "r", encoding="utf-8") as fin:
+        data = json.load(fin)
     validator = jsonschema.Draft7Validator(schema)
     try:
-        if not validator.validate(files):
+        if not validator.validate(data):
             print("Successfully!")
     except jsonschema.exceptions.ValidationError:
-        print("VALIDATION ERROR", list(validator.iter_errors(files)))
-        exit()
+        print("VALIDATION ERROR", file=sys.stderr)
+        exit(1)
 
-    return files
+    return data
 
 
 def main():
